@@ -1,4 +1,4 @@
-const API_URL = 'http://109.71.252.191:25611/produtos';
+const API_URL = '109.71.252.191:25611/produtos';
 const urlParams = new URLSearchParams(window.location.search);
 const produtoId = urlParams.get('id');
 
