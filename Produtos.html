@@ -93,7 +93,7 @@
     </footer>
 
     <script>
-        const API_URL = '109.71.252.191:25611/produtos';
+        const API_URL = 'https://109.71.252.191:25611/produtos';
         async function carregarProdutos() {
             const resposta = await fetch(API_URL);
             const produtos = await resposta.json();
