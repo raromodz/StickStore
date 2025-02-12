@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick Store</title>
+    <style>
+        /* Estilo básico */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #DC143C;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #B0C4DE;
+        }
+
+        .content {
+            margin: 20px auto;
+            max-width: 600px;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background: #222;
+            border-radius: 10px;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: #000;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .button {
+            background-color: #DC143C;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔧 Stick Store</h1>
+        <p class="subtitle">Quebrando padrões, criando o novo.</p>
+    </header>
+
+    <div class="content">
+        <h2>Produtos</h2>
+        <div class="product-list" id="produto-list"></div>
+
+        <h3>Adicionar Produto</h3>
+        <form id="adicionar-form">
+            <input type="text" id="nome" placeholder="Nome" required><br>
+            <input type="text" id="descricao" placeholder="Descrição" required><br>
+            <input type="number" id="preco" placeholder="Preço" required><br>
+            <input type="text" id="imagem" placeholder="URL da Imagem" required><br>
+            <button type="submit" class="button">Adicionar</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Stick Store - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="app.js"></script> <!-- Link para o arquivo JS -->
+</body>
+</html>
