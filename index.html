@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Produto - Stick Store</title>
+    <title>Stick Store - Produtos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,29 +20,52 @@
             margin-bottom: 20px;
         }
 
-        .form-container {
-            margin: 20px auto;
-            max-width: 600px;
-            background: #333;
-            padding: 20px;
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: #333;
+            color: #fff;
             border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
 
-        input, button {
-            margin-bottom: 10px;
-            padding: 10px;
+        .product-card img {
             width: 100%;
-            border: 1px solid #ddd;
+            height: auto;
             border-radius: 5px;
+            margin-bottom: 15px;
         }
 
-        button {
+        .product-card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            color: #B0C4DE;
+        }
+
+        .product-card .btn {
             background-color: #DC143C;
             color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        button:hover {
+        .product-card .btn:hover {
             background-color: darkred;
         }
 
@@ -52,28 +75,99 @@
             background: #222;
             border-radius: 10px;
         }
+
+        .error-message {
+            color: red;
+            font-size: 16px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>Editar Produto</h1>
-        <p>Preencha os detalhes abaixo para criar ou editar um produto.</p>
+        <h1>Bem-vindo à Stick Store!</h1>
+        <p>Confira os nossos produtos incríveis abaixo.</p>
     </header>
 
-    <div class="form-container">
-        <form id="formProduto">
-            <input type="text" id="nome" placeholder="Nome do Produto" required><br>
-            <input type="text" id="descricao" placeholder="Descrição do Produto" required><br>
-            <input type="number" id="preco" placeholder="Preço" required><br>
-            <input type="text" id="imagem" placeholder="URL da Imagem" required><br>
-            <button type="submit">Salvar Produto</button>
-        </form>
+    <div class="error-message" id="error-message"></div>
+
+    <div class="product-list" id="produtosContainer">
+        <!-- Produtos serão carregados aqui -->
     </div>
 
     <footer>
         <p>&copy; 2025 Stick Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="produto.js"></script>
+    <script>
+        const API_URL = 'http://109.71.252.191:25611/produtos';
+
+        async function carregarProdutos() {
+            try {
+                const resposta = await fetch(API_URL);
+                if (!resposta.ok) {
+                    throw new Error('Erro ao carregar produtos.');
+                }
+                const produtos = await resposta.json();
+
+                const produtosContainer = document.getElementById('produtosContainer');
+                produtosContainer.innerHTML = ''; // Limpar produtos existentes antes de adicionar novos
+
+                produtos.forEach(produto => {
+                    const produtoCard = document.createElement('div');
+                    produtoCard.classList.add('product-card');
+
+                    produtoCard.innerHTML = `
+                        <img src="${produto.imagem}" alt="${produto.nome}">
+                        <h3>${produto.nome}</h3>
+                        <p>${produto.descricao}</p>
+                        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+                        <button class="btn" onclick="editarProduto(${produto.id})">Editar</button>
+                        <button class="btn" onclick="excluirProduto(${produto.id})">Excluir</button>
+                    `;
+
+                    produtosContainer.appendChild(produtoCard);
+                });
+            } catch (erro) {
+                mostrarErro(erro.message);
+            }
+        }
+
+        async function editarProduto(id) {
+            try {
+                const resposta = await fetch(`${API_URL}/${id}`);
+                if (!resposta.ok) {
+                    throw new Error('Erro ao carregar dados para edição.');
+                }
+                window.location.href = `produto.html?id=${id}`;
+            } catch (erro) {
+                mostrarErro(erro.message);
+            }
+        }
+
+        async function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                try {
+                    const resposta = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                    if (!resposta.ok) {
+                        throw new Error('Erro ao excluir o produto.');
+                    }
+                    carregarProdutos(); // Recarregar a lista de produtos
+                } catch (erro) {
+                    mostrarErro(erro.message);
+                }
+            }
+        }
+
+        function mostrarErro(mensagem) {
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.textContent = mensagem;
+        }
+
+        // Carregar os produtos ao iniciar a página
+        carregarProdutos();
+    </script>
+
 </body>
 </html>
