@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick Store - Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #DC143C;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: #333;
+            color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            color: #B0C4DE;
+        }
+
+        .product-card .btn {
+            background-color: #DC143C;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .product-card .btn:hover {
+            background-color: darkred;
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background: #222;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bem-vindo à Stick Store!</h1>
+        <p>Confira os nossos produtos incríveis abaixo.</p>
+    </header>
+
+    <div class="product-list" id="produtosContainer">
+        <!-- Produtos serão carregados aqui -->
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Stick Store - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const API_URL = '109.71.252.191:25611/produtos';
+
+        async function carregarProdutos() {
+            const resposta = await fetch(API_URL);
+            const produtos = await resposta.json();
+
+            const produtosContainer = document.getElementById('produtosContainer');
+            produtosContainer.innerHTML = ''; // Limpar produtos existentes antes de adicionar novos
+
+            produtos.forEach(produto => {
+                const produtoCard = document.createElement('div');
+                produtoCard.classList.add('product-card');
+
+                produtoCard.innerHTML = `
+                    <img src="${produto.imagem}" alt="${produto.nome}">
+                    <h3>${produto.nome}</h3>
+                    <p>${produto.descricao}</p>
+                    <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+                    <button class="btn" onclick="editarProduto(${produto.id})">Editar</button>
+                    <button class="btn" onclick="excluirProduto(${produto.id})">Excluir</button>
+                `;
+
+                produtosContainer.appendChild(produtoCard);
+            });
+        }
+
+        async function editarProduto(id) {
+            window.location.href = `produto.html?id=${id}`;
+        }
+
+        async function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                carregarProdutos(); // Recarregar a lista de produtos
+            }
+        }
+
+        // Carregar os produtos ao iniciar a página
+        carregarProdutos();
+    </script>
+
+</body>
+</html>
