@@ -1,4 +1,4 @@
-const API_URL = 'http://stickstoreapi.is-going.live:25611/produtos';
+const API_URL = 'https://stickstoreapi.is-going.live:25611/produtos';
 const urlParams = new URLSearchParams(window.location.search);
 const produtoId = urlParams.get('id');
 
